@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="es">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Fractals and wavelet Fisher's information</title>
+
+		<meta name="description" content="InfoTheory - introCourse>
+		<meta name="author" content="Julio Ramírez-Pacheco">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/solarized.css" id="theme">
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+		<link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&family=Kaushan+Script&display=swap" rel="stylesheet">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+		<link rel="stylesheet" href="css/user.css">
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+		<div class="myLogo" style="background: url(img/logoUQRoo.png);
+												position: absolute;
+												bottom: 40px;
+												right: 80px;
+												width: 190px;
+												height: 100px;
+												background-size: cover;">
+		</div>
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1 style="font-family: 'Kaushan Script', cursive;"><span style="text-transform: capitalize; font-size: 0.7em"><span>Fractals</span><span style="text-transform: lowercase; font-size: 0.7em"><span> and</span></span> <span style="text-transform: capitalize; font-size: 0.7em">Wavelet Fisher's information</span></h1>
+					<h3 style="font-family: 'Kaushan Script', cursive; font-size: 50px; text-transform: capitalize; color: #4f6d7a;">W<span style="text-transform:lowercase;">ITCOM 2023	</span></h3>
+					<p style="font-family: 'Dancing Script', cursive;">
+						<small><span style= "color: #e76f51; font-size: 140%">Dr. Julio César Ramírez-Pacheco</span> </small>
+					</p>
+					<p style="font-size:1.5rem">Presentación en: <a style="color:#166088;" href="https://monoxide2000.github.io/slidesSEMANAUQRoo">https://monoxide2000.github.io/slidesWITCOM</a></p>
+
+				</section>
+
+				<section data-transition="zoom">
+					<h2>Contenido</h2>
+					<ul>
+						<li class="fragment">Introducción, motivación.</li>
+						<li class="fragment">Procesos con invarianza en escala.</li>
+						<li class="fragment">Análisis wavelet de procesos <span style= "color: #e76f51">$1/f^{\alpha}$.</span></li>
+						<li class="fragment">Medidad de información de Fisher</li>
+						<li class="fragment">Medidas de información de Fisher para procesos <span style= "color: #e76f51">$1/f^{\alpha}$</span>.</li>
+						<li class="fragment">Aplicaciones y conclusiones.</li>
+					</ul>
+				</section>
+
+				<section data-transition="zoom">
+						<h2>Introducción y motivación</h2>
+						<ul>
+							<li class="fragment" style="text-align:justify;">Los procesos fractales o procesos <span style= "color: #e76f51">$1/f^{\alpha}$</span> aparecen en diversos campos de la ciencia.</li>
+							<li class="fragment" style="text-align:justify;">Secuencias DNA, tráfico de redes, flujos turbulentos, tiempo de inter-latido, etc.</li>
+							<li class="fragment" style="text-align:justify;">Una forma de caracterizar estos procesos es mediante el valor del parámetro <span style= "color: #e76f51">$\alpha$</span>.</li>
+							<li class="fragment" style="text-align:justify;">Otra forma popular, es mediante el uso de medidas basadas en teoría de la información definidas en el dominio wavelet, en especial medidas de información de Fisher.</li>
+						</ul>
+				</section>
+
+				<section data-transition="zoom">
+					<h2>Introducción y Motivación: Cont.</h2>
+					<ul>
+						<li class="fragment" style="text-align:justify;">El objetivo del presente trabajo es mostrar el potencial de las medidas de información de Fisher para el análisis de señales fractales.</li>
+						<li class="fragment" style="text-align:justify;">Se sugieren aplicaciones basados en los resultados de aplicar esta medidad en procesos <span style= "color: #e76f51">$1/f^{\alpha}$</span>.</li>
+					</ul>
+				</section>
+
+
+				<!-- Example of nested vertical slides -->
+				<section data-transition="zoom">
+					<section>
+				      <h2>Procesos con invarianza en escala</h2>
+							<div class="fragment">
+										<div style="font-family: 'Pacifico';" class="def-block">
+										Definición
+										</div>
+										<div class="def-block-eq">
+										<p style="padding:0; margin:5px;">
+											Sea <span style= "color: #e76f51">$(X_t)_{t \in \mathbb{R}}$</span> una señal aleatoria. <span style= "color: #e76f51">$X_t$</span> es un proceso
+											con invarianza en escala (también llamado proceso <span style= "color: #e76f51">$1/f^{\alpha}$</span>) de índice <span style= "color: #e76f51"$\alpha$></span> si su densidad
+											espectral de potencia (PSD) <span style= "color: #e76f51">$\{\Gamma(\nu), \nu \in (A,B)\}$</span> satisface:
+											<br><br>
+											<span style= "color: #004b23">$$
+											\Gamma_{X}(\nu) \sim c_\gamma |\nu|^{-\alpha}
+											$$</span>
+
+									</div>
+						  </div>
+							<p class="fragment" style="text-align:left;">Dependiendo de <span style= "color: #e76f51">$A$</span>, <span style= "color: #e76f51">$B$</span> y <span style= "color: #e76f51">$\alpha$</span>, se pueden obtener varios procesos conocidos.</p>
+					</section>
+					<section>
+					<h2>Procesos FGN</h2>
+					<div class="w3-content w3-display-container" style="max-width:100%">
+               <img class="mySlides" src="img/fgn020.jpg" style="width:100%">
+               <img class="mySlides" src="img/fgn040.jpg" style="width:100%">
+               <img class="mySlides" src="img/fgn060.jpg" style="width:100%">
+							 <img class="mySlides" src="img/fgn080.jpg" style="width:100%">
+               <div class="w3-center w3-container w3-section w3-large w3-text-white w3-display-bottommiddle" style="width:100%">
+              <div class="w3-left w3-hover-text-khaki" onclick="plusDivs(-1)">&#10094;</div>
+                 <div class="w3-right w3-hover-text-khaki" onclick="plusDivs(1)">&#10095;</div>
+                 <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(1)"></span>
+                 <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(2)"></span>
+                 <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(3)"></span>
+								 <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(4)"></span>
+             </div>
+          </div>
+
+					</section>
+					</section>  <!--  End of nested slides  -->
+
+					<section>
+						<h2>Procesos FBM</h2>
+						<img src="img/fbmall.jpg" alt="">
+
+					</section>
+
+					<section data-transition="zoom">
+						<h2>Análisis wavelet de señales $1/f$</h2>
+						<div class="fragment">
+									<div style="font-family: 'Pacifico';" class="def-block">
+									Definición
+									</div>
+									<div class="def-block-eq">
+									<p style="padding:0; margin:5px;">
+										Sea <span style= "color: #e76f51">$(X_t)_{t \in \mathbb{R}}$</span> un proceso aleatorio de valores reales, entonces su transformada discreta wavelet (DWT), <span style= "color: #e76f51">$d_X(j,k)$</span>
+										está dada por:
+										<span style= "color: #004b23">$$
+											d_X(j,k) = 2^{-j/2} \int_{\mathbb{R}}{X_t \psi(2^{-j}t-k) dt}
+										$$</span>
+
+								</div>
+						</div>
+						<p class="fragment" style="text-align:left;">Para procesos fractales se tiene:
+							<span style= "color: #e76f51">$$\mathbb{E}|d_x(j.k)|^2 = 2c_H^2 2^{-j \alpha} \int_{0}^{\infty}{\nu^{\alpha} |\Psi(\nu)|^2} d\nu$$</span> </p>
+
+					</section>
+
+					<section data-transition="zoom">
+						<h2>Análisis wavelet de señales: Cont.</h2>
+						<ul>
+							<li class="fragment">Utilizando el concepto de energía promedio dado por:
+							<span style= "color: #e76f51">$$ \mathcal{E}_j = \frac{1}{N_j}\sum_{k}{\mathbb{E}_j|d_x(j,k)|^2} = \mathbb{E}|d_X(j,k)|^2$$</span></li>
+							<li class="fragment">Finalmente, la energía wavelet relativa (RWE), que representa un función de probabilidad está dada por:
+              <span style= "color: #e76f51">$$
+							p_j = \frac{\mathcal{E}_j}{\mathcal{E}_{tot}} = 2^{(j-1)\alpha} \frac{1-2^{\alpha}}{1-2^{\alpha N}}
+							$$</span>
+							</li>
+						</ul>
+					</section>
+
+
+
+
+					<section data-transition="zoom">
+					<h2>Información de Fisher: Definición 1</h2>
+
+		      	<p class="fragment" style="text-align:left;">Usando la fórmula:
+						<span style= "color: #e76f51; font-size: 80%;">$$
+						\mathcal{I}_1(p) =\int_{a}^{b}{\frac{\left(p' (x)\right)^2}{p(x)} dx} = \sum_{j=0}^{N-1}{\frac{\left(p_{j+1}- p_j\right)^2}{p_j}}
+					  $$</span></p>
+		      	<p class="fragment" style="text-align:left;">y la RWE, entonces la FIM queda:
+						<span style= "color: #e76f51; font-size: 80%;">$$
+						\mathcal{I}_1(p) = \frac{1-2^{\alpha(N-1)}}{1-2^{\alpha N}} \times \left(2^\alpha-1\right)^2
+						$$</span>
+					</p>
+
+					</section>
+
+					<section data-transition="zoom">
+					<h2>Información de Fisher: Definición 2</h2>
+
+						<p class="fragment" style="text-align:left;">Usando la fórmula:
+						<span style= "color: #e76f51; font-size: 80%;">$$
+						\mathcal{I}_2(p) = 4\int_{a}^{b}{\left(\frac{d}{dx}\sqrt{p(x)}\right)^2} = 4 \times \sum_{j=0}^{N-1}{\left(\sqrt{p_{j+1}}-\sqrt{p_j}\right)^2}
+						$$</span></p>
+						<p class="fragment" style="text-align:left;">y la RWE, entonces la FIM queda:
+						<span style= "color: #e76f51; font-size: 80%;">$$
+						\mathcal{I}_2(p) =  4\times \frac{1-2^{\alpha(N-1)}}{1-2^{\alpha N}} \times \left(2^{\alpha/2}-1\right)^2
+						$$</span>
+					</p>
+					</section>
+
+
+					<section data-transition="zoom">
+					<h2>Información de Fisher: Definición 3</h2>
+
+						<p class="fragment" style="text-align:left;">Usando la fórmula:
+						<span style= "color: #e76f51; font-size: 80%;">$$
+						\mathcal{I}_3(p) =\int_{a}^{b}{p(x)\left(\frac{d}{dx}\ln p(x)\right)^2}  = \sum_{j=0}^{N-1}{p_j\left(\ln \frac{p_{j+1}}{p_j}\right)^2}
+						$$</span></p>
+						<p class="fragment" style="text-align:left;">y la RWE, entonces la FIM queda:
+						<span style= "color: #e76f51; font-size: 80%;">$$
+						\mathcal{I}_3(p) =  \frac{1-2^{\alpha(N-1)}}{1-2^{\alpha N}} \times \left( \ln(2^\alpha)\right)^2
+						$$</span>
+					</p>
+					</section>
+
+					<section data-transition="zoom">
+	        <h2>FIM Definición 1</h2>
+					<img style="width:140%;" src="img/fim1.jpg" alt="Fisher FIM definition 1">
+					</section>
+
+
+					<section data-transition="zoom">
+	        <h2>FIM Definición 2</h2>
+					<img style="width:140%;" src="img/fim2.jpg" alt="Fisher FIM definition 2">
+					</section>
+
+
+					<section data-transition="zoom">
+					<h2>FIM Definición 3</h2>
+					<img style="width:140%;" src="img/fim3.jpg" alt="Fisher FIM definition 3">
+					</section>
+
+
+
+					<section data-transition="zoom">
+						<h2>Conclusiones</h2>
+						<ul>
+							<li class="fragment" style="text-align:justify;">El presente artículo presentó la extensión de tres definiciones de la medida de información de Fisher en el dominio wavelet.</li>
+							<li class="fragment" style="text-align:justify;">Las medidas de información de Fisher son crecientes para señales correlacionadas, decrecientes para señales  no correlacionadas y sero para un ruido blanco.</li>
+							<li class="fragment" style="text-align:justify;">Las medidas de información de Fisher pueden usarse para la clasificación de señales fractales.</li>
+						</ul>
+					</section>
+
+
+				<section>
+					<h2>¿Preguntas?</h2>
+					<h2 style="text-transform: lowercase; color: blue">juliocr@uqroo.edu.mx</h2>
+				</section>
+
+
+
+
+
+
+
+
+
+
+			</div>
+
+		</div>
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+				math: {
+					//	mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+					config: 'TeX-AMS_HTML-full'
+				},
+
+				menu: {
+		// Specifies which side of the presentation the menu will
+		// be shown. Use 'left' or 'right'.
+		side: 'left',
+
+		// Add slide numbers to the titles in the slide list.
+		// Use 'true' or format string (same as reveal.js slide numbers)
+		numbers: false,
+
+		// Specifies which slide elements will be used for generating
+		// the slide titles in the menu. The default selects the first
+		// heading element found in the slide, but you can specify any
+		// valid css selector and the text from the first matching
+		// element will be used.
+		// Note: that a section data-menu-title attribute or an element
+		// with a menu-title class will take precedence over this option
+		titleSelector: 'h1, h2, h3, h4, h5, h6',
+
+		// If slides do not have a matching title, attempt to use the
+		// start of the text content as the title instead
+		useTextContentForMissingTitles: false,
+
+		// Hide slides from the menu that do not have a title.
+		// Set to 'true' to only list slides with titles.
+		hideMissingTitles: false,
+
+		// Adds markers to the slide titles to indicate the
+		// progress through the presentation. Set to 'false'
+		// to hide the markers.
+		markers: true,
+
+		// Specify custom panels to be included in the menu, by
+		// providing an array of objects with 'title', 'icon'
+		// properties, and either a 'src' or 'content' property.
+		custom: false,
+
+		// Specifies the themes that will be available in the themes
+		// menu panel. Set to 'true' to show the themes menu panel
+		// with the default themes list. Alternatively, provide an
+		// array to specify the themes to make available in the
+		// themes menu panel, for example...
+		// [
+		//     { name: 'Black', theme: 'css/theme/black.css' },
+		//     { name: 'White', theme: 'css/theme/white.css' },
+		//     { name: 'League', theme: 'css/theme/league.css' }
+		// ]
+		themes: false,
+
+		// Specifies the path to the default theme files. If your
+		// presentation uses a different path to the standard reveal
+		// layout then you need to provide this option, but only
+		// when 'themes' is set to 'true'. If you provide your own
+		// list of themes or 'themes' is set to 'false' the
+		// 'themesPath' option is ignored.
+		themesPath: 'css/theme/',
+
+		// Specifies if the transitions menu panel will be shown.
+		// Set to 'true' to show the transitions menu panel with
+		// the default transitions list. Alternatively, provide an
+		// array to specify the transitions to make available in
+		// the transitions panel, for example...
+		// ['None', 'Fade', 'Slide']
+		transitions: false,
+
+		// Adds a menu button to the slides to open the menu panel.
+		// Set to 'false' to hide the button.
+		openButton: true,
+
+		// If 'true' allows the slide number in the presentation to
+		// open the menu panel. The reveal.js slideNumber option must
+		// be displayed for this to take effect
+		openSlideNumber: false,
+
+		// If true allows the user to open and navigate the menu using
+		// the keyboard. Standard keyboard interaction with reveal
+		// will be disabled while the menu is open.
+		keyboard: true,
+
+		// Normally the menu will close on user actions such as
+		// selecting a menu item, or clicking the presentation area.
+		// If 'true', the sticky option will leave the menu open
+		// until it is explicitly closed, that is, using the close
+		// button or pressing the ESC or m key (when the keyboard
+		// interaction option is enabled).
+		sticky: false,
+
+		// If 'true' standard menu items will be automatically opened
+		// when navigating using the keyboard. Note: this only takes
+		// effect when both the 'keyboard' and 'sticky' options are enabled.
+		autoOpen: true,
+
+		// If 'true' the menu will not be created until it is explicitly
+		// requested by calling RevealMenu.init(). Note this will delay
+		// the creation of all menu panels, including custom panels, and
+		// the menu button.
+		delayInit: false,
+
+		// If 'true' the menu will be shown when the menu is initialised.
+		openOnInit: false,
+
+		// By default the menu will load it's own font-awesome library
+		// icons. If your presentation needs to load a different
+		// font-awesome library the 'loadIcons' option can be set to false
+		// and the menu will not attempt to load the font-awesome library.
+		loadIcons: true
+	},
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/search/search.js', async: true },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/math/math.js', async: true },
+					{src: 'plugin/menu/menu.js'},
+					//{ src: 'plugin/katex/katex.js', async: true},
+					//{ src: '../math-katex/math-katex.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+			// JulioCRDev   slideshow
+			var slideIndex = 1;
+showDivs(slideIndex);
+
+function plusDivs(n) {
+  showDivs(slideIndex += n);
+}
+
+function currentDiv(n) {
+  showDivs(slideIndex = n);
+}
+
+function showDivs(n) {
+  var i;
+  var x = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("demo");
+  if (n > x.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = x.length}
+  for (i = 0; i < x.length; i++) {
+     x[i].style.display = "none";
+  }
+  for (i = 0; i < dots.length; i++) {
+     dots[i].className = dots[i].className.replace(" w3-white", "");
+  }
+  x[slideIndex-1].style.display = "block";
+  dots[slideIndex-1].className += " w3-white";
+}
+
+
+var myIndex = 0;
+carousel();
+
+function carousel() {
+    var i;
+    var x = document.getElementsByClassName("mySlides");
+    for (i = 0; i < x.length; i++) {
+       x[i].style.display = "none";
+    }
+    myIndex++;
+    if (myIndex > x.length) {myIndex = 1}
+    x[myIndex-1].style.display = "block";
+    setTimeout(carousel, 2000);
+}
+
+		</script>
+
+	</body>
+</html>
